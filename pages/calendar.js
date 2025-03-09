@@ -10,7 +10,7 @@ export default function BookingCalendar() {
   useEffect(() => {
     async function fetchAvailability() {
       try {
-        const response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"); // Replace with your script URL
+        const response = await fetch("https://script.google.com/macros/s/AKfycbwDWLghFbgyGiL1stwyd_W36gY_YrqhFuw4sA3mZxUrTDkOJd8uFmDOmMVP1VnMCkjM/exec"); // Replace with your script URL
         const data = await response.json();
         setAvailability(data);
       } catch (error) {
