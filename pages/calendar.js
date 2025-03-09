@@ -10,17 +10,19 @@ export default function BookingCalendar() {
   const [availability, setAvailability] = useState({});
 
   // Fetch availability from Google Sheets API (backend)
-  useEffect(() => {
-    async function fetchAvailability() {
-      try {
-        const response = await axios.get("/api/availability");
-        setAvailability(response.data);
-      } catch (error) {
-        console.error("Error fetching availability:", error);
-      }
+useEffect(() => {
+  async function fetchAvailability() {
+    try {
+      const response = await axios.get("/api/availability");
+      console.log("Fetched availability:", response.data); // Debugging line
+      setAvailability(response.data);
+    } catch (error) {
+      console.error("Error fetching availability:", error);
     }
-    fetchAvailability();
-  }, []);
+  }
+  fetchAvailability();
+}, []);
+
 
   // Function to check if a date has available slots
   function isDateAvailable(date) {
