@@ -1,38 +1,50 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 export default function CalendarPage() {
+  const [availableDates, setAvailableDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
 
-  // Function to fetch available time slots from Google Sheets (later)
+  // 🔹 Simulate fetching available dates from Google Sheets
+  useEffect(() => {
+    const fetchAvailableDates = async () => {
+      // Replace this with actual Google Sheets API call later
+      const mockAvailableDates = ["2025-03-12", "2025-03-14", "2025-03-16"];
+      setAvailableDates(mockAvailableDates);
+    };
+    fetchAvailableDates();
+  }, []);
+
+  // 🔹 Fetch available slots when a date is selected
   const fetchAvailableSlots = (date) => {
-    // Placeholder: Mock data for now
-    const mockSlots = [
-      "08:00 - 09:00",
-      "09:00 - 10:00",
-      "10:00 - 11:00",
-      "11:00 - 12:00",
-      "13:00 - 14:00",
-      "14:00 - 15:00",
-    ];
-    setAvailableSlots(mockSlots);
+    // Placeholder data (replace with real API later)
+    const mockSlots = {
+      "2025-03-12": ["08:00 - 09:00", "10:00 - 11:00"],
+      "2025-03-14": ["09:00 - 10:00", "11:00 - 12:00"],
+      "2025-03-16": ["14:00 - 15:00", "15:00 - 16:00"],
+    };
+    setAvailableSlots(mockSlots[date] || []);
   };
 
-  useEffect(() => {
-    if (selectedDate) {
-      fetchAvailableSlots(selectedDate);
-    }
-  }, [selectedDate]);
+  const handleDateChange = (event) => {
+    const selected = event.target.value;
+    setSelectedDate(selected);
+    fetchAvailableSlots(selected);
+  };
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Booking Calendar</h1>
-      <p>Select a date for your appointment:</p>
+      <p>Select a date:</p>
+
       <input
         type="date"
-        onChange={(e) => setSelectedDate(e.target.value)}
-        style={{ padding: "5px", fontSize: "16px" }}
+        onChange={handleDateChange}
+        style={{
+          padding: "5px",
+          fontSize: "16px",
+          border: availableDates.includes(selectedDate) ? "2px solid green" : "2px solid red",
+        }}
       />
 
       {selectedDate && (
@@ -52,6 +64,11 @@ export default function CalendarPage() {
           )}
         </div>
       )}
+
+      <div style={{ marginTop: "30px", fontSize: "14px" }}>
+        <p>✅ Green border = Available</p>
+        <p>❌ Red border = Fully booked</p>
+      </div>
     </div>
   );
 }
