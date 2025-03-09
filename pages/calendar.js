@@ -8,7 +8,7 @@ import axios from "axios";
 export default function BookingCalendar() {
   const [date, setDate] = useState(new Date());
   const [availability, setAvailability] = useState({});
-  
+
   // Fetch availability from Google Sheets API (backend)
   useEffect(() => {
     async function fetchAvailability() {
@@ -22,16 +22,6 @@ export default function BookingCalendar() {
     fetchAvailability();
   }, []);
 
-  function HomePage() {
-  return (
-    <div>
-      <h1>Welcome to Stelly and Izzy's Booking System</h1>
-    </div>
-  );
-}
-
-export default HomePage; // ✅ Ensure valid JSX is returned
-  
   // Function to check if a date has available slots
   function isDateAvailable(date) {
     const dateString = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
@@ -40,9 +30,9 @@ export default HomePage; // ✅ Ensure valid JSX is returned
 
   return (
     <div className="calendar-container">
-      <h1 className="title">Booking Calendar</h1>
+      <h1 className="title">Welcome to Stelly and Izzy's Booking System</h1>
       <p className="subtitle">Select a date:</p>
-      
+
       <Calendar
         onChange={setDate}
         value={date}
@@ -50,7 +40,7 @@ export default HomePage; // ✅ Ensure valid JSX is returned
           isDateAvailable(date) ? "available-slot" : "unavailable-slot"
         }
       />
-      
+
       <p className="selected-date">
         Selected Date: <strong>{date.toDateString()}</strong>
       </p>
