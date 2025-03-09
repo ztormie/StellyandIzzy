@@ -1,74 +1,54 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
-export default function CalendarPage() {
-  const [availableDates, setAvailableDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [availableSlots, setAvailableSlots] = useState([]);
+export default function BookingCalendar() {
+  const [availability, setAvailability] = useState({});
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // 🔹 Simulate fetching available dates from Google Sheets
+  // 📌 Fetch availability from Google Apps Script
   useEffect(() => {
-    const fetchAvailableDates = async () => {
-      // Replace this with actual Google Sheets API call later
-      const mockAvailableDates = ["2025-03-12", "2025-03-14", "2025-03-16"];
-      setAvailableDates(mockAvailableDates);
-    };
-    fetchAvailableDates();
+    async function fetchAvailability() {
+      try {
+        const response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"); // Replace with your script URL
+        const data = await response.json();
+        setAvailability(data);
+      } catch (error) {
+        console.error("Error fetching availability:", error);
+      }
+    }
+    fetchAvailability();
   }, []);
 
-  // 🔹 Fetch available slots when a date is selected
-  const fetchAvailableSlots = (date) => {
-    // Placeholder data (replace with real API later)
-    const mockSlots = {
-      "2025-03-12": ["08:00 - 09:00", "10:00 - 11:00"],
-      "2025-03-14": ["09:00 - 10:00", "11:00 - 12:00"],
-      "2025-03-16": ["14:00 - 15:00", "15:00 - 16:00"],
-    };
-    setAvailableSlots(mockSlots[date] || []);
-  };
-
-  const handleDateChange = (event) => {
-    const selected = event.target.value;
-    setSelectedDate(selected);
-    fetchAvailableSlots(selected);
-  };
+  // 📌 Highlight available & booked dates
+  function tileClassName({ date, view }) {
+    if (view === "month") {
+      const dateStr = date.toDateString();
+      if (availability[dateStr]) {
+        return availability[dateStr].available > 0 ? "available" : "booked";
+      }
+    }
+    return "";
+  }
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Booking Calendar</h1>
-      <p>Select a date:</p>
-
-      <input
-        type="date"
-        onChange={handleDateChange}
-        style={{
-          padding: "5px",
-          fontSize: "16px",
-          border: availableDates.includes(selectedDate) ? "2px solid green" : "2px solid red",
-        }}
+    <div>
+      <h2>Booking Calendar</h2>
+      <Calendar
+        onChange={setSelectedDate}
+        value={selectedDate}
+        tileClassName={tileClassName}
       />
-
-      {selectedDate && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Available Time Slots for {selectedDate}</h2>
-          {availableSlots.length > 0 ? (
-            availableSlots.map((slot, index) => (
-              <button
-                key={index}
-                style={{ display: "block", margin: "10px auto", padding: "10px" }}
-              >
-                {slot}
-              </button>
-            ))
-          ) : (
-            <p>No available slots.</p>
-          )}
-        </div>
-      )}
-
-      <div style={{ marginTop: "30px", fontSize: "14px" }}>
-        <p>✅ Green border = Available</p>
-        <p>❌ Red border = Fully booked</p>
-      </div>
+      <style jsx>{`
+        .available {
+          background-color: #b6e3b6 !important;
+          border-radius: 50%;
+        }
+        .booked {
+          background-color: #e3b6b6 !important;
+          border-radius: 50%;
+        }
+      `}</style>
     </div>
   );
 }
