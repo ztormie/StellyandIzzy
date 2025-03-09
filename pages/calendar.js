@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import axios from "axios";
-import ".styles/calendar.css"; // Custom styles for colors
+import "/styles/calendar.css"; // Custom styles for colors
 
 export default function BookingCalendar() {
   const [date, setDate] = useState(new Date());
