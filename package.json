@@ -10,7 +10,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "axios": "latest"
+    "axios": "latest",
     "react-calendar": "^3.7.0"
   }
 }
