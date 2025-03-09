@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import axios from "axios";
+import "./calendar.css"; // Custom styles for colors
 
 export default function BookingCalendar() {
+  const [date, setDate] = useState(new Date());
   const [availability, setAvailability] = useState({});
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // 📌 Fetch availability from Google Apps Script
+  
+  // Fetch availability from Google Sheets API (backend)
   useEffect(() => {
     async function fetchAvailability() {
       try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwDWLghFbgyGiL1stwyd_W36gY_YrqhFuw4sA3mZxUrTDkOJd8uFmDOmMVP1VnMCkjM/exec"); // Replace with your script URL
-        const data = await response.json();
-        setAvailability(data);
+        const response = await axios.get("/api/availability");
+        setAvailability(response.data);
       } catch (error) {
         console.error("Error fetching availability:", error);
       }
@@ -20,35 +23,28 @@ export default function BookingCalendar() {
     fetchAvailability();
   }, []);
 
-  // 📌 Highlight available & booked dates
-  function tileClassName({ date, view }) {
-    if (view === "month") {
-      const dateStr = date.toDateString();
-      if (availability[dateStr]) {
-        return availability[dateStr].available > 0 ? "available" : "booked";
-      }
-    }
-    return "";
+  // Function to check if a date has available slots
+  function isDateAvailable(date) {
+    const dateString = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+    return availability[dateString] === "Available";
   }
 
   return (
-    <div>
-      <h2>Booking Calendar</h2>
+    <div className="calendar-container">
+      <h1 className="title">Booking Calendar</h1>
+      <p className="subtitle">Select a date:</p>
+      
       <Calendar
-        onChange={setSelectedDate}
-        value={selectedDate}
-        tileClassName={tileClassName}
+        onChange={setDate}
+        value={date}
+        tileClassName={({ date }) =>
+          isDateAvailable(date) ? "available-slot" : "unavailable-slot"
+        }
       />
-      <style jsx>{`
-        .available {
-          background-color: #b6e3b6 !important;
-          border-radius: 50%;
-        }
-        .booked {
-          background-color: #e3b6b6 !important;
-          border-radius: 50%;
-        }
-      `}</style>
+      
+      <p className="selected-date">
+        Selected Date: <strong>{date.toDateString()}</strong>
+      </p>
     </div>
   );
 }
