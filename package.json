@@ -12,6 +12,7 @@
     "react-dom": "latest",
     "axios": "latest",
     "react-calendar": "^3.7.0"
+    "googleapis": "^118.0.0"
   }
 }
 
