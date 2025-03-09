@@ -22,6 +22,16 @@ export default function BookingCalendar() {
     fetchAvailability();
   }, []);
 
+  function HomePage() {
+  return (
+    <div>
+      <h1>Welcome to Stelly and Izzy's Booking System</h1>
+    </div>
+  );
+}
+
+export default HomePage; // ✅ Ensure valid JSX is returned
+  
   // Function to check if a date has available slots
   function isDateAvailable(date) {
     const dateString = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
