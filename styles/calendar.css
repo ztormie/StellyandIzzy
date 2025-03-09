@@ -1,0 +1,32 @@
+.calendar-container {
+  max-width: 350px;
+  margin: auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.available-slot {
+  background-color: #c8f7c5 !important; /* Light green */
+  color: #2c662d !important;
+  border-radius: 50%;
+}
+
+.unavailable-slot {
+  background-color: #f7c5c5 !important; /* Light red */
+  color: #8a2c2c !important;
+  border-radius: 50%;
+}
+
+.selected-date {
+  font-size: 18px;
+  margin-top: 10px;
+}
